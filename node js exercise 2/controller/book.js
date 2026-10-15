@@ -1,24 +1,26 @@
-const books = require("../model/user");
+// import books from "../model/user.js";
+import User from "../model/user.js";
+import { generateToken } from "../utils/generateToken.js";
 
-exports.createbook = async (req, res) => {
+export const createbook = async (req, res) => {
   try {
     console.log("body data", req.body);
-    const book = new books(req.body);
+    const book = new User(req.body);
     const saved = await book.save();
     res.status(201).json(saved);
   } catch (err) {
     res.status(500).send(err);
   }
 };
-exports.getbook = async (req, res) => {
-  const book = await books.find();
+export const getbook = async (req, res) => {
+  const book = await User.find();
   res.json(book);
 };
 
-exports.updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedbook = await books.findByIdAndUpdate(
+    const updatedbook = await User.findByIdAndUpdate(
       id,
       req.body,
       { new: true }, // returns updated document
@@ -31,11 +33,10 @@ exports.updateUser = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-
-exports.deletedbook = async (req, res) => {
+export const deletedbook = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedbook = await books.findByIdAndDelete(id);
+    const deletedbook = await User.findByIdAndDelete(id);
     if (!deletedbook) {
       return res.status(404).send("User not found");
     }
@@ -44,3 +45,4 @@ exports.deletedbook = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
